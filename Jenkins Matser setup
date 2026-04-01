@@ -126,7 +126,7 @@ ubuntu@Jenkins-Agent:~/.ssh$
 
 
 
-copy the pubil id address and open in browser with port 8080
+copy the pubilc id address and open in browser with port 8080
 
 54.226.4.133:8080
 /var/lib/jenkins/secrets/initialAdminPassword
