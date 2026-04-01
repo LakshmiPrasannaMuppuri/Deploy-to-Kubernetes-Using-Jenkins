@@ -1,0 +1,78 @@
+CTS+2142289@LTIN531281 MINGW64 ~/OneDrive - Cognizant/Documents/.AWS
+$ ssh -i "ubuntu-keypair.pem" ubuntu@54.82.110.191
+
+ubuntu@ip-172-31-23-205:~$ sudo apt update
+ubuntu@ip-172-31-23-205:~$ sudo apt upgrade
+
+change the hostname
+ubuntu@ip-172-31-23-205:~$ sudo nano /etc/hostname
+ubuntu@ip-172-31-30-30:~$ cat /etc/hostname
+Jenkins-Agent
+
+reboot the session
+ubuntu@ip-172-31-30-30:~$ sudo init 6
+
+Broadcast message from root@ip-172-31-30-30 on pts/1 (Wed 2026-04-01 07:05:45 UTC):
+
+The system will reboot now!
+
+ubuntu@ip-172-31-30-30:~$ Connection to 54.82.110.191 closed by remote host.
+Connection to 54.82.110.191 closed.
+
+
+login again
+CTS+2142289@LTIN531281 MINGW64 ~/OneDrive - Cognizant/Documents/.AWS
+$ ssh -i "ubuntu-keypair.pem" ubuntu@54.82.110.191
+
+ubuntu@Jenkins-Agent:~$ sudo apt install openjdk-21-jre -y
+ubuntu@Jenkins-Agent:~$ java --version
+openjdk 21.0.10 2026-01-20
+OpenJDK Runtime Environment (build 21.0.10+7-Ubuntu-124.04)
+OpenJDK 64-Bit Server VM (build 21.0.10+7-Ubuntu-124.04, mixed mode, sharing)
+ubuntu@Jenkins-Agent:~$
+
+
+install docker 
+ubuntu@Jenkins-Agent:~$ sudo apt-get install docker.io
+
+i will give the full rights to current user 
+ubuntu@Jenkins-Agent:~$ sudo usermod -aG docker $USER
+ubuntu@Jenkins-Agent:~$ sudo init 6
+
+and i will open the file /etc/ssh/sshd_config file
+ubuntu@Jenkins-Agent:~$ sudo nano /etc/ssh/sshd_config
+make remove hastag for
+PubKeyAuthentication Yes
+AutherizedKeysFile   .ssh/autherized_keys  .ssh/autherized_keys2
+and save the file/crtl x/ type y/ and enter
+
+
+reload the ssh service
+ubuntu@Jenkins-Master:~$ sudo service ssh reload
+
+
+open ssh path
+copy the public of jenkins master and paste in jenkins agent ssh path authorized key
+
+ubuntu@Jenkins-Agent:~$ pwd
+/home/ubuntu
+ubuntu@Jenkins-Agent:~$ cd .ssh
+ubuntu@Jenkins-Agent:~/.ssh$ ls
+authorized_keys
+ubuntu@Jenkins-Agent:~/.ssh$ cat authorized_keys
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDZ+k+TJvKwIzV1RyEi4y7hx2uLOlhmclBzxxNGU2UQAYKf7wrkCBybuJCRkWclI9ZHtn/PfXqjZINcz1l+eHA4G8WHlmoZZB5twy5fxCU7IsFtTM5hB3mKvWGSwQHmkwsuKUl+LFYdzPVwvGWDn1ZR7SPqllrvUiEXO/fvsHyqqAPNRuw8gx7MD1KyI+zqRk+3DScvVQu0WJ2xzbiO2NEdIhrcidei6/4de62WyEP2gsIqAn1Av9Niwt3ySlAuRDK2f1Uzmrk+lPqdf1bWlLAS/l9qbEKh+X8w3GuuNMtxnxJtYLcSOzXkwvhgyKNsenCt9CTVVQshPeSnudCtyax/ ubuntu-keypair
+ubuntu@Jenkins-Agent:~/.ssh$ vi a
+ubuntu@Jenkins-Agent:~/.ssh$ vi authorized_keys
+ubuntu@Jenkins-Agent:~/.ssh$ cat authorized_keys
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDZ+k+TJvKwIzV1RyEi4y7hx2uLOlhmclBzxxNGU2UQAYKf7wrkCBybuJCRkWclI9ZHtn/PfXqjZINcz1l+eHA4G8WHlmoZZB5twy5fxCU7IsFtTM5hB3mKvWGSwQHmkwsuKUl+LFYdzPVwvGWDn1ZR7SPqllrvUiEXO/fvsHyqqAPNRuw8gx7MD1KyI+zqRk+3DScvVQu0WJ2xzbiO2NEdIhrcidei6/4de62WyEP2gsiIqAn1Av9Niwt3ySlAuRDK2f1Uzmrk+lPqdf1bWlLAS/l9qbEKh+X8w3GuuNMtxnxJtYLcSOzXkwvhgyKNsenCt9CTVVQshPeSnudCtyax/ ubuntu-keypair
+
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFS8wC7BtpunAh+5YJYSp6bXmPeUAtrGs2cazyAR1mJJ ubuntu@Jenkins-Master
+ubuntu@Jenkins-Agent:~/.ssh$
+
+
+
+
+
+
+
+
