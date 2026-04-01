@@ -22,7 +22,7 @@ Connection to 54.226.4.133 closed.
 login again
 CTS+2142289@LTIN531281 MINGW64 ~/OneDrive - Cognizant/Documents/.AWS
 $ ssh -i "ubuntu-keypair.pem" ubuntu@54.226.4.133
-ubuntu@Jenkins-Master:~$ sudo apt install openjdk-17-jre
+ubuntu@Jenkins-Master:~$ sudo apt install openjdk-21-jre -y
 ubuntu@Jenkins-Master:~$ java --version
 openjdk 17.0.18 2026-01-20
 OpenJDK Runtime Environment (build 17.0.18+8-Ubuntu-124.04.1)
