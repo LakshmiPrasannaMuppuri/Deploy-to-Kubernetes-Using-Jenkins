@@ -69,11 +69,103 @@ Apr 01 06:48:23 Jenkins-Master systemd[1]: Started jenkins.service - Jenkins Con
 ubuntu@Jenkins-Master:~$
 
 
+and i will open the file /etc/ssh/sshd_config file
+ubuntu@Jenkins-Agent:~$ sudo nano /etc/ssh/sshd_config
+make remove hastag for
+PubKeyAuthentication Yes
+AutherizedKeysFile   .ssh/autherized_keys  .ssh/autherized_keys2
+and save the file/crtl x/ type y/ and enter
+
+reload the ssh service
+ubuntu@Jenkins-Master:~$ sudo service ssh reload
+
+
+generate the SSH key
+ubuntu@Jenkins-Master:~$ ssh-keygen
+Generating public/private ed25519 key pair.
+Enter file in which to save the key (/home/ubuntu/.ssh/id_ed25519):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/ubuntu/.ssh/id_ed25519
+Your public key has been saved in /home/ubuntu/.ssh/id_ed25519.pub
+The key fingerprint is:
+SHA256:2OWMxmWxZPsSAAbEiyMt6ii4QwIqUTqF1BY9dyTlA8w ubuntu@Jenkins-Master
+The key's randomart image is:
++--[ED25519 256]--+
+|.o.+=.=++o+      |
+|. oo.+ E+= +     |
+| =.. .o .oB      |
+|B + .  + B.o     |
+|+= .  . S + .    |
+|=.     .   .     |
+|B                |
+|=.               |
+|oo               |
++----[SHA256]-----+
+ubuntu@Jenkins-Master:~$ pwd
+/home/ubuntu
+
+open ssh path
+ubuntu@Jenkins-Master:~$ cd .ssh
+ubuntu@Jenkins-Master:~/.ssh$ ls
+authorized_keys  id_ed25519  id_ed25519.pub
+
+open the public key and paste the public key jenkins agent ssh path authorized key
+ubuntu@Jenkins-Master:~/.ssh$ cat id_ed25519.pub
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFS8wC7BtpunAh+5YJYSp6bXmPeUAtrGs2cazyAR1mJJ ubuntu@Jenkins-Master
+
+
+ubuntu@Jenkins-Agent:~/.ssh$ cat authorized_keys
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDZ+k+TJvKwIzV1RyEi4y7hx2uLOlhmclBzxxNGU2UQAYKf7wrkCBybuJCRkWclI9ZHtn/PfXqjZINcz1l+eHA4G8WHlmoZZB5twy5fxCU7IsFtTM5hB3mKvWGSwQHmkwsuKUl+LFYdzPVwvGWDn1ZR7SPqllrvUiEXO/fvsHyqqAPNRuw8gx7MD1KyI+zqRk+3DScvVQu0WJ2xzbiO2NEdIhrcidei6/4de62WyEP2gsiIqAn1Av9Niwt3ySlAuRDK2f1Uzmrk+lPqdf1bWlLAS/l9qbEKh+X8w3GuuNMtxnxJtYLcSOzXkwvhgyKNsenCt9CTVVQshPeSnudCtyax/ ubuntu-keypair
+
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFS8wC7BtpunAh+5YJYSp6bXmPeUAtrGs2cazyAR1mJJ ubuntu@Jenkins-Master
+ubuntu@Jenkins-Agent:~/.ssh$
 
 
 
 
+copy the pubil id address and open in browser with port 8080
 
+54.226.4.133:8080
+/var/lib/jenkins/secrets/initialAdminPassword
+
+ubuntu@Jenkins-Master:~/.ssh$ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+
+3bf86f15712348c9b7df7561bdc043cd
+
+paste the password in browser
+installed suggested plugins
+give the user details, save and continue
+
+http://54.226.4.133:8080/
+
+
+go to manage jeniks
+nodes
+built-in-nodes
+no.of executors make 0
+
+and create new node
+name - Jenkins-Agent
+permenant agent - create
+Number of executors make 2
+Remote root directory - directory of agent server
+/home/ubuntu
+Lables - Jenkins-Agent
+Usage - use this node as much as possible
+Launch method - launch agents via SSH
+Host - provide private ip address of jenkins-agent
+add credentials - Add SSH Username with private key
+      scope - Global(Jenkins, nodes, items, all child items, etc)
+      ID - Jenkins-Agent
+      Description - Jenkins-Agent
+      Username - ubuntu
+      Private Key - add private key of Jenkins-master in ssh path
+      click on create
+select credentils which created now
+Host Key Verification Strategy - non verifying verification strategy
+Availability - keep this agent online as much as possible
+click on save
 
 
 ===============================================================================
