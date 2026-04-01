@@ -52,7 +52,7 @@ ubuntu@Jenkins-Master:~$ sudo service ssh reload
 
 
 open ssh path
-copy the public of jenkins master and paste in jenkins agent ssh path authorized key
+copy the public key of jenkins master and paste in jenkins agent ssh path authorized key
 
 ubuntu@Jenkins-Agent:~$ pwd
 /home/ubuntu
