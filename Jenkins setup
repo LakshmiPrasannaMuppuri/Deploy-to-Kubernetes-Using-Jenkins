@@ -1,0 +1,246 @@
+CTS+2142289@LTIN531281 MINGW64 ~/OneDrive - Cognizant/Documents/.AWS
+$ ssh -i "ubuntu-keypair.pem" ubuntu@54.226.4.133
+
+ubuntu@ip-172-31-23-205:~$ sudo apt update
+ubuntu@ip-172-31-23-205:~$ sudo apt upgrade
+
+change the hostname
+ubuntu@ip-172-31-23-205:~$ sudo nano /etc/hostname
+ubuntu@ip-172-31-23-205:~$ cat /etc/hostname
+Jenkins-Master
+
+reboot the session
+ubuntu@ip-172-31-23-205:~$ sudo init 6
+
+Broadcast message from root@ip-172-31-23-205 on pts/1 (Wed 2026-04-01 06:29:57 UTC):
+
+The system will reboot now!
+
+ubuntu@ip-172-31-23-205:~$ Connection to 54.226.4.133 closed by remote host.
+Connection to 54.226.4.133 closed.
+
+login again
+CTS+2142289@LTIN531281 MINGW64 ~/OneDrive - Cognizant/Documents/.AWS
+$ ssh -i "ubuntu-keypair.pem" ubuntu@54.226.4.133
+ubuntu@Jenkins-Master:~$ sudo apt install openjdk-17-jre
+ubuntu@Jenkins-Master:~$ java --version
+openjdk 17.0.18 2026-01-20
+OpenJDK Runtime Environment (build 17.0.18+8-Ubuntu-124.04.1)
+OpenJDK 64-Bit Server VM (build 17.0.18+8-Ubuntu-124.04.1, mixed mode, sharing)
+
+
+https://www.jenkins.io/doc/book/installing/linux/
+under Weekly release
+Installation of jenkins
+sudo wget -O /etc/apt/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian/jenkins.io-2026.key
+echo "deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc]" \
+  https://pkg.jenkins.io/debian binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt update
+sudo apt install jenkins
+
+this command will enable jenkins to start at every boot
+ubuntu@Jenkins-Master:~$ sudo systemctl enable jenkins
+Synchronizing state of jenkins.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
+Executing: /usr/lib/systemd/systemd-sysv-install enable jenkins
+ubuntu@Jenkins-Master:~$ sudo systemctl start jenkins
+ubuntu@Jenkins-Master:~$ systemctl status jenkins
+● jenkins.service - Jenkins Continuous Integration Server
+     Loaded: loaded (/usr/lib/systemd/system/jenkins.service; enabled; preset: enabled)
+     Active: active (running) since Wed 2026-04-01 06:48:23 UTC; 3min 0s ago
+   Main PID: 4603 (java)
+      Tasks: 37 (limit: 1117)
+     Memory: 273.9M (peak: 275.5M)
+        CPU: 13.143s
+     CGroup: /system.slice/jenkins.service
+             └─4603 /usr/bin/java -Djava.awt.headless=true -jar /usr/share/java/jenkins.war --webroot=/var/cache/jenkins/war --httpPort=8080
+
+Apr 01 06:48:18 Jenkins-Master jenkins[4603]: [LF]> 3bf86f15712348c9b7df7561bdc043cd
+Apr 01 06:48:18 Jenkins-Master jenkins[4603]: [LF]>
+Apr 01 06:48:18 Jenkins-Master jenkins[4603]: [LF]> This may also be found at: /var/lib/jenkins/secrets/initialAdminPassword
+Apr 01 06:48:18 Jenkins-Master jenkins[4603]: [LF]>
+Apr 01 06:48:18 Jenkins-Master jenkins[4603]: [LF]> *************************************************************
+Apr 01 06:48:18 Jenkins-Master jenkins[4603]: [LF]> *************************************************************
+Apr 01 06:48:18 Jenkins-Master jenkins[4603]: [LF]> *************************************************************
+Apr 01 06:48:23 Jenkins-Master jenkins[4603]: 2026-04-01 06:48:23.645+0000 [id=31]        INFO        jenkins.InitReactorRunner$1#onAttained: Completed initialization
+Apr 01 06:48:23 Jenkins-Master jenkins[4603]: 2026-04-01 06:48:23.688+0000 [id=24]        INFO        hudson.lifecycle.Lifecycle#onReady: Jenkins is fully up and running
+Apr 01 06:48:23 Jenkins-Master systemd[1]: Started jenkins.service - Jenkins Continuous Integration Server.
+ubuntu@Jenkins-Master:~$
+
+
+
+
+
+
+
+
+
+===============================================================================
+
+errors
+
+ubuntu@Jenkins-Master:~$ sudo systemctl enable jenkins
+Synchronizing state of jenkins.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
+Executing: /usr/lib/systemd/systemd-sysv-install enable jenkins
+ubuntu@Jenkins-Master:~$ sudo systemctl start jenkins
+Job for jenkins.service failed because the control process exited with error code.
+See "systemctl status jenkins.service" and "journalctl -xeu jenkins.service" for details.
+ubuntu@Jenkins-Master:~$ systemctl status jenkins
+× jenkins.service - Jenkins Continuous Integration Server
+     Loaded: loaded (/usr/lib/systemd/system/jenkins.service; enabled; preset: enabled)
+     Active: failed (Result: exit-code) since Wed 2026-04-01 06:42:26 UTC; 1min 54s ago
+   Main PID: 3648 (code=exited, status=1/FAILURE)
+        CPU: 519ms
+
+Apr 01 06:42:26 Jenkins-Master systemd[1]: jenkins.service: Failed with result 'exit-code'.
+Apr 01 06:42:26 Jenkins-Master systemd[1]: Failed to start jenkins.service - Jenkins Continuous Integration Server.
+Apr 01 06:42:26 Jenkins-Master systemd[1]: jenkins.service: Scheduled restart job, restart counter is at 5.
+Apr 01 06:42:26 Jenkins-Master systemd[1]: jenkins.service: Start request repeated too quickly.
+Apr 01 06:42:26 Jenkins-Master systemd[1]: jenkins.service: Failed with result 'exit-code'.
+Apr 01 06:42:26 Jenkins-Master systemd[1]: Failed to start jenkins.service - Jenkins Continuous Integration Server.
+Apr 01 06:43:52 Jenkins-Master systemd[1]: jenkins.service: Start request repeated too quickly.
+Apr 01 06:43:52 Jenkins-Master systemd[1]: jenkins.service: Failed with result 'exit-code'.
+Apr 01 06:43:52 Jenkins-Master systemd[1]: Failed to start jenkins.service - Jenkins Continuous Integration Server.
+ubuntu@Jenkins-Master:~$ sudo systemctl status jenkins.service
+× jenkins.service - Jenkins Continuous Integration Server
+     Loaded: loaded (/usr/lib/systemd/system/jenkins.service; enabled; preset: enabled)
+     Active: failed (Result: exit-code) since Wed 2026-04-01 06:42:26 UTC; 3min 6s ago
+   Main PID: 3648 (code=exited, status=1/FAILURE)
+        CPU: 519ms
+
+Apr 01 06:42:26 Jenkins-Master systemd[1]: jenkins.service: Failed with result 'exit-code'.
+Apr 01 06:42:26 Jenkins-Master systemd[1]: Failed to start jenkins.service - Jenkins Continuous Integration Server.
+Apr 01 06:42:26 Jenkins-Master systemd[1]: jenkins.service: Scheduled restart job, restart counter is at 5.
+Apr 01 06:42:26 Jenkins-Master systemd[1]: jenkins.service: Start request repeated too quickly.
+Apr 01 06:42:26 Jenkins-Master systemd[1]: jenkins.service: Failed with result 'exit-code'.
+Apr 01 06:42:26 Jenkins-Master systemd[1]: Failed to start jenkins.service - Jenkins Continuous Integration Server.
+Apr 01 06:43:52 Jenkins-Master systemd[1]: jenkins.service: Start request repeated too quickly.
+Apr 01 06:43:52 Jenkins-Master systemd[1]: jenkins.service: Failed with result 'exit-code'.
+Apr 01 06:43:52 Jenkins-Master systemd[1]: Failed to start jenkins.service - Jenkins Continuous Integration Server.
+
+how to handled this error
+
+check service status
+sudo systemctl status jenkins.service
+
+check service status
+
+ubuntu@Jenkins-Master:~$ sudo systemctl status jenkins.service
+× jenkins.service - Jenkins Continuous Integration Server
+     Loaded: loaded (/usr/lib/systemd/system/jenkins.service; enabled; preset: enabled)
+     Active: failed (Result: exit-code) since Wed 2026-04-01 06:42:26 UTC; 3min 6s ago
+   Main PID: 3648 (code=exited, status=1/FAILURE)
+        CPU: 519ms
+
+Apr 01 06:42:26 Jenkins-Master systemd[1]: jenkins.service: Failed with result 'exit-code'.
+Apr 01 06:42:26 Jenkins-Master systemd[1]: Failed to start jenkins.service - Jenkins Continuous Integration Server.
+Apr 01 06:42:26 Jenkins-Master systemd[1]: jenkins.service: Scheduled restart job, restart counter is at 5.
+Apr 01 06:42:26 Jenkins-Master systemd[1]: jenkins.service: Start request repeated too quickly.
+Apr 01 06:42:26 Jenkins-Master systemd[1]: jenkins.service: Failed with result 'exit-code'.
+Apr 01 06:42:26 Jenkins-Master systemd[1]: Failed to start jenkins.service - Jenkins Continuous Integration Server.
+Apr 01 06:43:52 Jenkins-Master systemd[1]: jenkins.service: Start request repeated too quickly.
+Apr 01 06:43:52 Jenkins-Master systemd[1]: jenkins.service: Failed with result 'exit-code'.
+Apr 01 06:43:52 Jenkins-Master systemd[1]: Failed to start jenkins.service - Jenkins Continuous Integration Server.
+
+Review logs
+
+ubuntu@Jenkins-Master:~$ sudo journalctl -xeu jenkins.service
+░░
+░░ The unit jenkins.service has entered the 'failed' state with result 'exit-code'.
+Apr 01 06:42:26 Jenkins-Master systemd[1]: Failed to start jenkins.service - Jenkins Continuous Integration Server.
+░░ Subject: A start job for unit jenkins.service has failed
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░
+░░ A start job for unit jenkins.service has finished with a failure.
+░░
+░░ The job identifier is 2317 and the job result is failed.
+Apr 01 06:42:26 Jenkins-Master systemd[1]: jenkins.service: Scheduled restart job, restart counter is at 5.
+░░ Subject: Automatic restarting of a unit has been scheduled
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░
+░░ Automatic restarting of the unit jenkins.service has been scheduled, as the result for
+░░ the configured Restart= setting for the unit.
+Apr 01 06:42:26 Jenkins-Master systemd[1]: jenkins.service: Start request repeated too quickly.
+Apr 01 06:42:26 Jenkins-Master systemd[1]: jenkins.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░
+░░ The unit jenkins.service has entered the 'failed' state with result 'exit-code'.
+Apr 01 06:42:26 Jenkins-Master systemd[1]: Failed to start jenkins.service - Jenkins Continuous Integration Server.
+░░ Subject: A start job for unit jenkins.service has failed
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░
+░░ A start job for unit jenkins.service has finished with a failure.
+░░
+░░ The job identifier is 2425 and the job result is failed.
+Apr 01 06:43:52 Jenkins-Master systemd[1]: jenkins.service: Start request repeated too quickly.
+Apr 01 06:43:52 Jenkins-Master systemd[1]: jenkins.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░
+░░ The unit jenkins.service has entered the 'failed' state with result 'exit-code'.
+Apr 01 06:43:52 Jenkins-Master systemd[1]: Failed to start jenkins.service - Jenkins Continuous Integration Server.
+░░ Subject: A start job for unit jenkins.service has failed
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░
+░░ A start job for unit jenkins.service has finished with a failure.
+░░
+░░ The job identifier is 2533 and the job result is failed.
+lines 184-230/230 (END)
+
+Verify Java Installation
+
+ubuntu@Jenkins-Master:~$ java -version
+openjdk version "17.0.18" 2026-01-20
+OpenJDK Runtime Environment (build 17.0.18+8-Ubuntu-124.04.1)
+OpenJDK 64-Bit Server VM (build 17.0.18+8-Ubuntu-124.04.1, mixed mode, sharing)
+ubuntu@Jenkins-Master:~$ sudo apt install openjdk-21-jdk -y
+
+Check Port Conflicts
+
+sudo lsof -i :8080
+ubuntu@Jenkins-Master:~$ sudo lsof -i :8080
+
+Permissions & Ownership
+
+ubuntu@Jenkins-Master:~$ sudo chown -R jenkins:jenkins /var/lib/jenkins
+
+Restart Jenkins
+ubuntu@Jenkins-Master:~$ sudo systemctl daemon-reload
+ubuntu@Jenkins-Master:~$ sudo systemctl restart jenkins
+
+sudo systemctl status jenkins.service -l
+sudo journalctl -xeu jenkins.service
+
+
+ubuntu@Jenkins-Master:~$ systemctl status jenkins
+● jenkins.service - Jenkins Continuous Integration Server
+     Loaded: loaded (/usr/lib/systemd/system/jenkins.service; enabled; preset: enabled)
+     Active: active (running) since Wed 2026-04-01 06:48:23 UTC; 3min 0s ago
+   Main PID: 4603 (java)
+      Tasks: 37 (limit: 1117)
+     Memory: 273.9M (peak: 275.5M)
+        CPU: 13.143s
+     CGroup: /system.slice/jenkins.service
+             └─4603 /usr/bin/java -Djava.awt.headless=true -jar /usr/share/java/jenkins.war --webroot=/var/cache/jenkins/war --httpPort=8080
+
+Apr 01 06:48:18 Jenkins-Master jenkins[4603]: [LF]> 3bf86f15712348c9b7df7561bdc043cd
+Apr 01 06:48:18 Jenkins-Master jenkins[4603]: [LF]>
+Apr 01 06:48:18 Jenkins-Master jenkins[4603]: [LF]> This may also be found at: /var/lib/jenkins/secrets/initialAdminPassword
+Apr 01 06:48:18 Jenkins-Master jenkins[4603]: [LF]>
+Apr 01 06:48:18 Jenkins-Master jenkins[4603]: [LF]> *************************************************************
+Apr 01 06:48:18 Jenkins-Master jenkins[4603]: [LF]> *************************************************************
+Apr 01 06:48:18 Jenkins-Master jenkins[4603]: [LF]> *************************************************************
+Apr 01 06:48:23 Jenkins-Master jenkins[4603]: 2026-04-01 06:48:23.645+0000 [id=31]        INFO        jenkins.InitReactorRunner$1#onAttained: Completed initialization
+Apr 01 06:48:23 Jenkins-Master jenkins[4603]: 2026-04-01 06:48:23.688+0000 [id=24]        INFO        hudson.lifecycle.Lifecycle#onReady: Jenkins is fully up and running
+Apr 01 06:48:23 Jenkins-Master systemd[1]: Started jenkins.service - Jenkins Continuous Integration Server.
+ubuntu@Jenkins-Master:~$
+
+
