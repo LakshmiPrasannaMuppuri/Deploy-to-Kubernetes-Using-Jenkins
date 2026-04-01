@@ -19,6 +19,8 @@ The system will reboot now!
 ubuntu@ip-172-31-23-205:~$ Connection to 54.226.4.133 closed by remote host.
 Connection to 54.226.4.133 closed.
 
+open port 8080 in security inbound rules
+
 login again
 CTS+2142289@LTIN531281 MINGW64 ~/OneDrive - Cognizant/Documents/.AWS
 $ ssh -i "ubuntu-keypair.pem" ubuntu@54.226.4.133
